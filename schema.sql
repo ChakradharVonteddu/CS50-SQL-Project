@@ -17,7 +17,7 @@ CREATE TABLE "Bonds"(
     "Purchased?" INTEGER NOT NULL CHECK("Purchased?" IN (0,1)) DEFAULT 0,
     PRIMARY KEY("id"),
     FOREIGN KEY("Rating_Agency_id") REFERENCES "Rating_Agency"("id”),
-    FOREIGN KEY(“Company_id”) REFERENCES “Companies”(“id”)
+    FOREIGN KEY("Company_id") REFERENCES “Companies”("id")
 );
 
 
