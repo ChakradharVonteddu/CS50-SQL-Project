@@ -10,12 +10,14 @@ CREATE TABLE "Rating_Agency"(
 CREATE TABLE "Bonds"(
     "id" INTEGER,
     "Rating_Agency_id" INTEGER,
+    “Company_id” INTEGER,
     "Rating" TEXT NOT NULL CHECK(("Rating" IN ('AAA','AA','A','BBB') AND "Investment_Grade"==1) OR ("Rating" IN ('BB','B','CCC','CC','C','D') AND "Investment_Grade"==0)),
     "Investment_Grade" INTEGER NOT NULL CHECK("Investment_Grade" IN (0,1)),
     "Date" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "Purchased?" INTEGER NOT NULL CHECK("Purchased?" IN (0,1)) DEFAULT 0,
     PRIMARY KEY("id"),
-    FOREIGN KEY("Rating_Agency_id") REFERENCES "Rating_Agency"("id")
+    FOREIGN KEY("Rating_Agency_id") REFERENCES "Rating_Agency"("id”),
+    FOREIGN KEY(“Company_id”) REFERENCES “Companies”(“id”)
 );
 
 
@@ -56,7 +58,7 @@ CREATE VIEW "Investment_Grade_Bonds"
 AS
 SELECT "id"
 	,"Rating"
-	,"Name"
+	,"Name" AS "Rating_Agency"
 	,"Date"
 FROM "Bonds"
 JOIN "Rating_Agency" ON "Rating_Agency"."id" = "Bonds"."Rating_Agency_id"
@@ -68,7 +70,7 @@ CREATE VIEW "Junk_Bonds"
 AS
 SELECT "id"
 	,"Rating"
-	,"Name"
+	,"Name" AS "Rating_Agency"
 	,"Date"
 FROM "Bonds"
 JOIN "Rating_Agency" ON "Rating_Agency"."id" = "Bonds"."Rating_Agency_id"
@@ -78,8 +80,7 @@ WHERE "Investment_Grade" == 0;
 -- View that contains information about purchased bonds
 CREATE VIEW "Personal_Portfolio" AS
 SELECT "Bonds"."id" AS "Bond_id","Rating","Investment_Grade","Name" AS "Company_Name" FROM "Bonds"
-JOIN "Issue" ON "Bonds"."id"="Issue"."Bond_id"
-JOIN "Companies" ON "Issue"."Company_id"="Companies"."id"
+JOIN "Companies" ON “Bonds”.”Company_id"="Companies"."id"
 WHERE "Bonds"."Purchased?"=1;
 
 
