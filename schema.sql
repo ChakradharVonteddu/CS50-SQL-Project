@@ -31,15 +31,6 @@ CREATE TABLE "Companies"(
 );
 
 
--- Represents which company issued which bond
-CREATE TABLE "Issue" (
-    "Company_id" INTEGER,
-    "Bond_id" INTEGER,
-    FOREIGN KEY("Company_id") REFERENCES "Companies"("id"),
-    FOREIGN KEY("Bond_id") REFERENCES "Bonds"("id")
-);
-
-
 -- Represents the financials of each company in the list
 CREATE TABLE "Financials" (
     "Company_id" INTEGER UNIQUE,
